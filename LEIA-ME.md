@@ -14,14 +14,16 @@ A área tem três cursos, definidos em `content/cursos.json`. Cada curso lista o
 
 Antes de publicar, troque `ID_PRODUTO_MANUAL`, `ID_PRODUTO_COMPLETO` e `ID_PRODUTO_COMPLETO_YOUTUBE` pelos IDs (UUID) reais dos produtos na Cakto. Em `"checkout"`, coloque o link de compra do plano. Quem não tem o curso vê o cartão bloqueado com o botão "Quero liberar".
 
-Quando o curso do YouTube ficar pronto: crie `content/youtube/modulos.json`, `content/youtube/aulas/` e `content/youtube/media/` (igual aos outros cursos) e apague a linha `"embreve": true`.
+Um curso com `"embreve": true` aparece com o selo "Em breve" e não abre.
+
+Uma aula com `"bloqueada": "texto"` no `modulos.json` aparece com cadeado e mostra só esse texto; o conteúdo dela nunca é entregue. Para liberar, apague a linha `"bloqueada"`.
 
 ## Como o acesso funciona
 
 1. O aluno digita o e-mail em `/`.
 2. O servidor consulta a **API da Cakto**, pega os pedidos `paid` desse e-mail e libera os cursos ligados a esses produtos.
 3. Se houver ao menos um curso, o aluno entra na hora, em qualquer aparelho, com uma sessão (cookie HttpOnly, 30 dias). Não há envio de e-mail.
-4. A cada hora de uso, as compras são revalidadas na Cakto. Pedido `refunded` ou `chargedback` deixa de contar e o curso é bloqueado.
+4. A cada 5 minutos de uso, as compras são revalidadas na Cakto. Pedido `refunded` ou `chargedback` deixa de contar e o curso é bloqueado.
 
 Aulas, prints e vídeos ficam em `content/<curso>/`, fora da pasta pública. Eles só são entregues pelas rotas `/api/conteudo` e `/api/media`, e só dos cursos que o aluno comprou.
 

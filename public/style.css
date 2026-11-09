@@ -139,7 +139,7 @@ img, video { display: block; max-width: 100%; height: auto; }
 .home__resume { display: grid; gap: .6rem; align-content: start; }
 .home__resume .prog-label { margin: 0; }
 .home__resume .btn { margin-top: .4rem; }
-.mods--cursos { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.mods.mods--cursos { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem; list-style: none; margin: 0; padding: 0; }
 .mod { display: flex; flex-direction: column; gap: .5rem; text-decoration: none; transition: transform .12s, box-shadow .12s; }
 .mod:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--sombra-cor); }

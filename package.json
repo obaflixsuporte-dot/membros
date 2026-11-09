@@ -1,0 +1,7 @@
+{
+  "name": "area-de-membros-manual",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": { "dev": "node dev.mjs" }
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "m1",
+    "titulo": "Introdução",
+    "descricao": "Apresentação do manual, resultados de vídeos já produzidos e o que você vai aprender.",
+    "aulas": [
+      { "id": "m1-boas-vindas", "titulo": "Boas-vindas e o que você vai aprender" },
+      { "id": "m1-resultados", "titulo": "Resultados dos vídeos" }
+    ]
+  },
+  {
+    "id": "m2",
+    "titulo": "Ferramentas",
+    "descricao": "Claude Code (obrigatório), ChatGPT e ElevenLabs (opcionais): para que serve cada um e como começar.",
+    "aulas": [
+      { "id": "m2-ferramentas", "titulo": "As ferramentas do método" }
+    ]
+  },
+  {
+    "id": "m3",
+    "titulo": "Nichos e vídeos virais",
+    "descricao": "Onde procurar referências, nichos de exemplo, como baixar o vídeo e organizar as pastas.",
+    "aulas": [
+      { "id": "m3-onde-procurar", "titulo": "Onde procurar referências" },
+      { "id": "m3-nichos", "titulo": "Nichos de exemplo" },
+      { "id": "m3-baixar-organizar", "titulo": "Baixar a referência e organizar as pastas" }
+    ]
+  },
+  {
+    "id": "m4",
+    "titulo": "Extraindo a transcrição",
+    "descricao": "Transcreva o vídeo de referência no TurboScribe e baixe o texto em TXT.",
+    "aulas": [
+      { "id": "m4-turboscribe", "titulo": "Transcrição com o TurboScribe" }
+    ]
+  },
+  {
+    "id": "m5",
+    "titulo": "Traduzindo ou recriando o roteiro",
+    "descricao": "Use a transcrição como ponto de partida para traduzir, adaptar ou criar uma história nova.",
+    "aulas": [
+      { "id": "m5-roteiro", "titulo": "Traduzir, adaptar ou criar o roteiro" }
+    ]
+  },
+  {
+    "id": "m6",
+    "titulo": "Criando o áudio",
+    "descricao": "Grave com a sua voz ou gere a narração com inteligência artificial no ElevenLabs.",
+    "aulas": [
+      { "id": "m6-opcoes", "titulo": "Sua voz ou voz com IA" },
+      { "id": "m6-elevenlabs", "titulo": "Texto para Áudio no ElevenLabs" }
+    ]
+  },
+  {
+    "id": "m7",
+    "titulo": "Criando o vídeo com Claude Code",
+    "descricao": "Junte roteiro, áudio e vídeo de referência e peça ao Claude Code para montar o vídeo final.",
+    "aulas": [
+      { "id": "m7-claude-code", "titulo": "Criando o vídeo com Claude Code" },
+      { "id": "m7-publicar", "titulo": "Publicando nas redes" }
+    ]
+  }
+]

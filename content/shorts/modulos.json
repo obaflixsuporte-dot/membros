@@ -1,0 +1,38 @@
+[
+  {
+    "id": "s1",
+    "titulo": "Ferramentas",
+    "descricao": "ChatGPT, ElevenLabs e Claude Code: a função de cada um e por que só o Claude Code é indispensável.",
+    "aulas": [{ "id": "s1-ferramentas", "titulo": "Quais ferramentas vamos utilizar" }]
+  },
+  {
+    "id": "s2",
+    "titulo": "Nichos e vídeos virais",
+    "descricao": "Como encontrar nichos e vídeos para se inspirar em qualquer rede social.",
+    "aulas": [{ "id": "s2-nichos", "titulo": "Encontrando nichos e vídeos para modelar" }]
+  },
+  {
+    "id": "s3",
+    "titulo": "Download e extração",
+    "descricao": "Baixar o vídeo de referência e extrair quadros, gancho, áudio e dados para o Claude Code.",
+    "aulas": [{ "id": "s3-extracao", "titulo": "Baixando o vídeo e extraindo os dados" }]
+  },
+  {
+    "id": "s4",
+    "titulo": "Transcrição e roteiro",
+    "descricao": "Transcrever o áudio original e pedir à IA para traduzir, conferir os fatos e adaptar o roteiro.",
+    "aulas": [{ "id": "s4-roteiro", "titulo": "Transcrevendo o áudio e adaptando o roteiro" }]
+  },
+  {
+    "id": "s5",
+    "titulo": "Narração",
+    "descricao": "Gerar o áudio do roteiro no ElevenLabs, caso não use a própria voz.",
+    "aulas": [{ "id": "s5-narracao", "titulo": "Gerando a narração no ElevenLabs" }]
+  },
+  {
+    "id": "s6",
+    "titulo": "Produção com Claude Code",
+    "descricao": "Dar acesso à pasta do projeto e pedir ao Claude Code para montar o vídeo final.",
+    "aulas": [{ "id": "s6-producao", "titulo": "Criando o vídeo com Claude Code" }]
+  }
+]

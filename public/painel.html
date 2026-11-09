@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#F3ECD9">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23F4731F' stroke='%231E1410' stroke-width='2'/%3E%3Cpath d='M13 10l9 6-9 6z' fill='%231E1410'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>try{var t=localStorage.getItem("tema");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <title>Manual Vídeos com IA — Área de membros</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+  <header class="topbar">
+    <div class="wrap topbar__in">
+      <a class="brand" href="/painel" aria-label="Vídeos com IA — área de membros"><span class="brand__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5v15l12-7.5z"/></svg></span><span class="brand__name">Vídeos com <em>IA</em></span></a>
+      <div class="topbar__acts">
+        <button class="icon-btn theme js-theme" type="button" aria-label="Alternar modo claro ou escuro">
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button class="btn btn--sec btn--sm js-sair" type="button">Sair</button>
+      </div>
+    </div>
+  </header>
+  <div class="wrap layout">
+    <aside class="card side js-side" aria-label="Módulos do curso">
+      <a class="side__back" href="#/">← Meus cursos</a>
+      <p class="side__title js-ctitle"></p>
+      <button class="side__toggle js-side-toggle" type="button" aria-expanded="false">
+        <span>Módulos e aulas</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="prog-label"><span>Seu progresso</span><span class="js-pct">0%</span></div>
+      <div class="prog" role="progressbar" aria-label="Progresso no curso" aria-valuemin="0" aria-valuemax="100"><i class="js-bar" style="width:0"></i></div>
+      <ol class="nav js-nav"></ol>
+    </aside>
+    <main id="conteudo" class="js-main" tabindex="-1"><p class="loading">Carregando…</p></main>
+  </div>
+</body>
+</html>

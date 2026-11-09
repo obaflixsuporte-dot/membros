@@ -1,0 +1,233 @@
+
+cd "pasta onde você esta editando os videos"
+
+Add-Type -AssemblyName System.Drawing
+
+# CONFIGURACAO
+$video = "COLOQUE AQUI O ENDERECO DO VIDEO QUE VOCE BAIXO"
+$saida = "PASTA ONDE VOCE ESTA EDITANDO OS VIDEOS"
+
+$framesDir   = Join-Path $saida "01_FRAMES_1FPS"
+$mosaicosDir = Join-Path $saida "02_MOSAICOS"
+$ganchoDir   = Join-Path $saida "03_GANCHO_2FPS"
+$audioDir    = Join-Path $saida "04_AUDIO"
+$dadosDir    = Join-Path $saida "05_DADOS"
+
+# Altere para $true caso queira usar Whisper
+$fazerWhisper = $false
+
+foreach ($p in @($framesDir,$mosaicosDir,$ganchoDir,$audioDir,$dadosDir)) {
+    New-Item -ItemType Directory -Force -Path $p | Out-Null
+}
+
+if (!(Test-Path $video)) {
+    throw "Video nao encontrado: $video"
+}
+
+foreach ($programa in @("ffmpeg","ffprobe")) {
+    if (!(Get-Command $programa -ErrorAction SilentlyContinue)) {
+        throw "$programa nao encontrado no PATH."
+    }
+}
+
+# 1. LIMPAR EXTRACOES ANTERIORES
+Write-Host "`n[1/6] Preparando pastas..." -ForegroundColor Cyan
+
+$limpezas = @(
+    @{ Pasta = $framesDir; Filtro = "frame_*.jpg" },
+    @{ Pasta = $mosaicosDir; Filtro = "mosaico_*.jpg" },
+    @{ Pasta = $ganchoDir; Filtro = "gancho_*.jpg" }
+)
+
+foreach ($item in $limpezas) {
+    Get-ChildItem -LiteralPath $item.Pasta -Filter $item.Filtro -File -ErrorAction SilentlyContinue |
+        Remove-Item -Force
+}
+
+# 2. EXTRAIR FRAMES 1 FPS
+Write-Host "`n[2/6] Extraindo frames..." -ForegroundColor Cyan
+
+$filtro = "fps=1:start_time=0,scale=320:568:force_original_aspect_ratio=decrease,pad=320:568:(ow-iw)/2:(oh-ih)/2:black"
+
+& ffmpeg -hide_banner -loglevel error -y `
+    -i "$video" `
+    -vf "$filtro" `
+    -start_number 0 `
+    -q:v 3 `
+    "$framesDir\frame_%05d.jpg"
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Erro ao extrair frames."
+}
+
+$frames = @(Get-ChildItem "$framesDir\frame_*.jpg" | Sort-Object Name)
+
+if ($frames.Count -eq 0) {
+    throw "Nenhum frame foi extraido."
+}
+
+# 3. CRIAR MOSAICOS 5x4 COM MINUTAGENS
+Write-Host "`n[3/6] Criando mosaicos..." -ForegroundColor Cyan
+
+$w = 320
+$h = 568
+$header = 28
+$colunas = 5
+$linhas = 4
+$porMosaico = 20
+
+$fonte = [System.Drawing.Font]::new(
+    "Arial", 14, [System.Drawing.FontStyle]::Bold
+)
+
+try {
+    for ($i = 0; $i -lt $frames.Count; $i += $porMosaico) {
+
+        $numero = [int]([math]::Floor($i / $porMosaico) + 1)
+
+        $bmp = [System.Drawing.Bitmap]::new(
+            ($w * $colunas),
+            (($h + $header) * $linhas)
+        )
+
+        $g = [System.Drawing.Graphics]::FromImage($bmp)
+
+        try {
+            $g.Clear([System.Drawing.Color]::Black)
+
+            for ($j = 0; $j -lt $porMosaico; $j++) {
+
+                $idx = $i + $j
+                if ($idx -ge $frames.Count) { break }
+
+                $x = ($j % $colunas) * $w
+                $y = [int]([math]::Floor($j / $colunas) * ($h + $header))
+
+                $img = [System.Drawing.Image]::FromFile(
+                    $frames[$idx].FullName
+                )
+
+                try {
+                    $g.DrawImage($img, $x, ($y + $header), $w, $h)
+                }
+                finally {
+                    $img.Dispose()
+                }
+
+                $tempo = [TimeSpan]::FromSeconds($idx)
+
+                $timestamp = "{0:00}:{1:00}:{2:00}.000" -f `
+                    [int]$tempo.TotalHours,
+                    $tempo.Minutes,
+                    $tempo.Seconds
+
+                $g.DrawString(
+                    $timestamp,
+                    $fonte,
+                    [System.Drawing.Brushes]::White,
+                    [single]($x + 5),
+                    [single]($y + 5)
+                )
+            }
+
+            $arquivo = Join-Path $mosaicosDir (
+                "mosaico_{0:D3}.jpg" -f $numero
+            )
+
+            $bmp.Save(
+                $arquivo,
+                [System.Drawing.Imaging.ImageFormat]::Jpeg
+            )
+        }
+        finally {
+            $g.Dispose()
+            $bmp.Dispose()
+        }
+    }
+}
+finally {
+    $fonte.Dispose()
+}
+
+# 4. EXTRAIR GANCHO - 2 FPS NOS PRIMEIROS 12 SEGUNDOS
+Write-Host "`n[4/6] Extraindo gancho inicial..." -ForegroundColor Cyan
+
+& ffmpeg -hide_banner -loglevel error -y `
+    -i "$video" `
+    -t 12 `
+    -vf "fps=2:start_time=0,scale=480:-2" `
+    -start_number 0 `
+    -q:v 2 `
+    "$ganchoDir\gancho_%03d.jpg"
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Warning "Erro na extracao do gancho."
+}
+
+# 5. EXTRAIR AUDIO ORIGINAL
+Write-Host "`n[5/6] Extraindo audio..." -ForegroundColor Cyan
+
+$wav = Join-Path $audioDir "audio_original.wav"
+
+& ffmpeg -hide_banner -loglevel error -y `
+    -i "$video" `
+    -vn -ac 1 -ar 16000 `
+    -c:a pcm_s16le `
+    "$wav"
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Warning "Nao foi possivel extrair audio."
+}
+
+# 6. GERAR METADADOS E INDICE
+Write-Host "`n[6/6] Gerando dados..." -ForegroundColor Cyan
+
+& ffprobe -v error `
+    -show_format -show_streams `
+    -of json "$video" |
+    Set-Content "$dadosDir\info_video.json" -Encoding UTF8
+
+$indice = for ($n = 0; $n -lt $frames.Count; $n++) {
+
+    $tempo = [TimeSpan]::FromSeconds($n)
+
+    [PSCustomObject]@{
+        frame = $frames[$n].Name
+        segundo_aproximado = $n
+        minutagem = ("{0:00}:{1:00}:{2:00}.000" -f `
+            [int]$tempo.TotalHours,
+            $tempo.Minutes,
+            $tempo.Seconds)
+    }
+}
+
+$indice | Export-Csv "$dadosDir\indice_frames.csv" `
+    -NoTypeInformation -Delimiter ";" -Encoding UTF8
+
+# WHISPER OPCIONAL
+if ($fazerWhisper -and (Test-Path $wav)) {
+
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+
+        Write-Host "`nTranscrevendo com Whisper..." -ForegroundColor Cyan
+
+        & python -m whisper "$wav" `
+            --model base `
+            --task transcribe `
+            --device cpu `
+            --fp16 False `
+            --output_format all `
+            --output_dir "$dadosDir"
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "Whisper nao conseguiu transcrever."
+        }
+    }
+}
+
+Write-Host "`nPROCESSO CONCLUIDO!" -ForegroundColor Green
+Write-Host "Video original: $video"
+Write-Host "Frames: $($frames.Count)"
+Write-Host "Mosaicos: $([math]::Ceiling($frames.Count / 20))"
+Write-Host "Audio: $wav"
+Write-Host "Arquivos: $saida"

@@ -1,0 +1,9 @@
+cd "pasta onde você baixou o vídeo original"
+
+python -m whisper ".\04_AUDIO\audio_original.wav" `
+    --model base `
+    --task transcribe `
+    --device cpu `
+    --fp16 False `
+    --output_format all `
+    --output_dir ".\ANALISE\05_DADOS"

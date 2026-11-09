@@ -1,0 +1,33 @@
+[
+  {
+    "id": "manual",
+    "titulo": "Manual: do roteiro ao vídeo final",
+    "descricao": "O passo a passo escrito, com prints e exemplos de cada etapa.",
+    "produtos": [
+      "5b1cdf9a-550a-4f32-8409-e9030df22070",
+      "14e9a0e6-00cc-4733-9319-aa541d3bef32",
+      "22ca4bf4-7a71-46ec-820b-5a408300b846"
+    ],
+    "checkout": "https://pay.cakto.com.br/qzj3yyy_1301898"
+  },
+  {
+    "id": "shorts",
+    "titulo": "Curso completo: shorts com IA",
+    "descricao": "Aulas em vídeo mostrando, na prática, como criar os vídeos curtos do começo ao fim.",
+    "produtos": [
+      "14e9a0e6-00cc-4733-9319-aa541d3bef32",
+      "22ca4bf4-7a71-46ec-820b-5a408300b846"
+    ],
+    "checkout": "https://pay.cakto.com.br/36kmwmy_1297578"
+  },
+  {
+    "id": "youtube",
+    "titulo": "Vídeos longos para o YouTube",
+    "descricao": "Como criar vídeos longos para o YouTube e monetizar o canal.",
+    "produtos": [
+      "22ca4bf4-7a71-46ec-820b-5a408300b846"
+    ],
+    "checkout": "https://pay.cakto.com.br/pi4rjbf_1301908",
+    "embreve": true
+  }
+]

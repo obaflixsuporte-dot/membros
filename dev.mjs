@@ -1,5 +1,5 @@
 // Servidor local (só desenvolvimento): node dev.mjs
-// Sem chaves reais, simula a Cakto: e-mails em DEV_PAID compraram os produtos em DEV_PRODUCTS (padrão: todos do cursos.json).
+// Sem chaves reais (ou com DEV_MOCK=1), simula a Cakto: e-mails em DEV_PAID compraram os produtos em DEV_PRODUCTS (padrão: todos do cursos.json).
 import http from "node:http";
 import { readFile } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
@@ -18,7 +18,7 @@ Object.assign(process.env, {
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url, opt = {}) => {
   const u = String(url);
-  if (u.includes("api.cakto.com.br") && !process.env.CAKTO_CLIENT_ID) {
+  if (u.includes("api.cakto.com.br") && (!process.env.CAKTO_CLIENT_ID || process.env.DEV_MOCK)) {
     if (u.endsWith("/token/")) return Response.json({ access_token: "dev", expires_in: 36000 });
     const email = new URL(u).searchParams.get("customer");
     const paid = (process.env.DEV_PAID || "aluno@teste.com").split(",");

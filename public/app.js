@@ -205,7 +205,7 @@ async function setupPainel() {
   };
   const pct = (c) => Math.round((c.done.size / (c.aulas.length || 1)) * 100);
   const modPct = (c, m) => Math.round((m.aulas.filter((a) => c.done.has(a.id)).length / (m.aulas.length || 1)) * 100);
-  const next = (c) => c.aulas.find((a) => a.id === c.prog.last && !c.done.has(a.id)) || c.aulas.find((a) => !c.done.has(a.id)) || c.aulas.find((a) => a.id === c.prog.last) || c.aulas[0];
+  const next = (c) => c.aulas.find((a) => a.id === c.prog.last && !c.done.has(a.id)) || c.aulas.find((a) => !c.done.has(a.id) && !a.bloqueada) || c.aulas.find((a) => a.id === c.prog.last) || c.aulas[0];
   const aulaHref = (c, id) => `#/c/${c.cid}/aula/${encodeURIComponent(id)}`;
 
   const renderNav = (c, cur) => {
@@ -213,7 +213,7 @@ async function setupPainel() {
     $(".js-ctitle").textContent = c.curso.titulo;
     nav.innerHTML = c.mods.map((m, mi) => `<li>
       <p class="nav__mod"><span>Módulo ${mi + 1}</span> · ${esc(m.titulo)}</p>
-      <ol>${m.aulas.map((a) => `<li><a href="${aulaHref(c, a.id)}" class="${c.done.has(a.id) ? "is-done" : ""}"${a.id === cur ? ' aria-current="page"' : ""}><span class="chk">${CHECK}</span><span>${esc(a.titulo)}</span></a></li>`).join("")}</ol>
+      <ol>${m.aulas.map((a) => `<li><a href="${aulaHref(c, a.id)}" class="${c.done.has(a.id) ? "is-done" : ""}"${a.id === cur ? ' aria-current="page"' : ""}>${a.bloqueada ? `<span class="chk chk--lock" title="Bloqueada">${LOCK}</span>` : `<span class="chk">${CHECK}</span>`}<span>${esc(a.titulo)}</span></a></li>`).join("")}</ol>
     </li>`).join("");
     $(".js-pct").textContent = `${pct(c)}%`;
     $(".js-bar").style.width = `${pct(c)}%`;
@@ -268,16 +268,17 @@ async function setupPainel() {
     c.prog.last = id; c.save();
     renderNav(c, id);
     main.innerHTML = '<p class="loading">Carregando aula…</p>';
-    let md = "";
-    try { md = (await api(`/api/conteudo?curso=${c.cid}&aula=${encodeURIComponent(id)}`)).md; } catch (e) { if (e.message === "401") return; }
+    let md = "", travada = "";
+    try { ({ md, bloqueada: travada } = await api(`/api/conteudo?curso=${c.cid}&aula=${encodeURIComponent(id)}`)); } catch (e) { if (e.message === "401") return; }
     if (location.hash !== here) return; // aluno já trocou de aula
-    const body = md.trim() ? (window.marked ? marked.parse(md) : `<pre>${esc(md)}</pre>`) : '<p class="pending">O conteúdo desta aula está sendo preparado.</p>';
+    const body = travada ? `<div class="locked">${LOCK}<p><strong>Aula bloqueada</strong></p><p>${esc(travada)}</p></div>`
+      : md.trim() ? (window.marked ? marked.parse(md) : `<pre>${esc(md)}</pre>`) : '<p class="pending">O conteúdo desta aula está sendo preparado.</p>';
     main.innerHTML = `<article class="card lesson">
       <p class="tag">Módulo ${a.mi + 1} · ${esc(a.mod.titulo)}</p>
       <h1>${esc(a.titulo)}</h1>
       <div class="md">${body}</div>
       <div class="lesson__acts">
-        <button class="btn ${c.done.has(id) ? "btn--sec" : ""} js-done" type="button" aria-pressed="${c.done.has(id)}">${c.done.has(id) ? "✓ Aula concluída" : "Marcar como concluída"}</button>
+        ${travada ? "<span></span>" : `<button class="btn ${c.done.has(id) ? "btn--sec" : ""} js-done" type="button" aria-pressed="${c.done.has(id)}">${c.done.has(id) ? "✓ Aula concluída" : "Marcar como concluída"}</button>`}
         <div>
           ${prev ? `<a class="btn btn--sec" href="${aulaHref(c, prev.id)}">← Anterior</a>` : `<a class="btn btn--sec" href="#/c/${c.cid}">← Início do curso</a>`}
           ${nxt ? `<a class="btn btn--sec" href="${aulaHref(c, nxt.id)}">Próxima →</a>` : `<a class="btn btn--sec" href="#/c/${c.cid}">Ver todos os módulos</a>`}
@@ -303,7 +304,7 @@ async function setupPainel() {
       });
       pre.append(b);
     });
-    $(".js-done", main).addEventListener("click", () => {
+    $(".js-done", main)?.addEventListener("click", () => {
       c.done.has(id) ? c.done.delete(id) : c.done.add(id);
       c.save();
       if (c.done.has(id) && nxt) location.hash = aulaHref(c, nxt.id);

@@ -25,6 +25,7 @@ export default async function handler(req, res) {
   if (!aulaId) return send(res, 200, { modulos });
   const aula = modulos.flatMap((m) => m.aulas).find((a) => a.id === aulaId);
   if (!aula) return send(res, 404, { error: "Aula não encontrada." });
+  if (aula.bloqueada) return send(res, 200, { md: "", bloqueada: aula.bloqueada }); // aula travada: nunca entrega o conteúdo
   const md = await readFile(path.join(ROOT, id, "aulas", `${aula.id}.md`), "utf8").catch(() => "");
   send(res, 200, { md });
 }

@@ -131,6 +131,12 @@ img, video { display: block; max-width: 100%; height: auto; }
 .is-done .chk { background: var(--texto-cor); border-color: var(--texto-cor); color: var(--fundo); }
 .nav a[aria-current="page"].is-done .chk { background: #1E1410; border-color: #1E1410; color: var(--laranja); }
 .is-done .chk svg { visibility: visible; }
+.chk--lock { border: 0; }
+.chk--lock svg { visibility: visible; width: 15px; height: 15px; }
+.locked { display: grid; justify-items: center; gap: .4rem; text-align: center; padding: clamp(2rem, 6vw, 3.5rem) 1rem; border: 2px dashed var(--suave); border-radius: 18px; }
+.locked svg { width: 40px; height: 40px; color: var(--laranja-escuro); margin-bottom: .4rem; }
+.md .locked p { margin: 0; color: var(--texto-2); }
+.md .locked strong { font-family: var(--display); font-weight: 400; font-size: 1.6rem; letter-spacing: .02em; text-transform: uppercase; color: var(--texto-cor); }
 
 .home h1 { font-size: clamp(2.6rem, 6vw, 4rem); margin-bottom: .75rem; }
 .home__lead { color: var(--texto-2); max-width: 40em; margin: 0 0 1.5rem; }

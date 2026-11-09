@@ -1,0 +1,12 @@
+[
+  {
+    "id": "y1",
+    "titulo": "Vídeos longos para o YouTube",
+    "descricao": "Estratégia, criação do vídeo do zero e publicação no YouTube.",
+    "aulas": [
+      { "id": "y1-estrategia", "titulo": "Estratégia para criar vídeos longos" },
+      { "id": "y1-do-zero", "titulo": "Criando o vídeo do zero", "bloqueada": "Esta aula é liberada 7 dias após a compra." },
+      { "id": "y1-postando", "titulo": "Postando o vídeo no YouTube", "bloqueada": "Esta aula é liberada 7 dias após a compra." }
+    ]
+  }
+]

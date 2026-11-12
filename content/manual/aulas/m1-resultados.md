@@ -1,14 +1,14 @@
 Estes são resultados de vídeos que já produzimos com este processo.
 
 - **+20 mil seguidores** em 2 dias
-- **5,1 milhões de visualizações** no primeiro vídeo
+- **7,3 milhões de visualizações** no primeiro vídeo
 - **+700 mil curtidas**
 
 ## Alguns dos vídeos
 
 <figure>
 <video class="vertical" controls preload="none" playsinline src="media/m1/v-numero3.mp4" poster="media/m1/v-numero3.jpg"></video>
-<figcaption>O mistério do número 3: 5,1 mi de visualizações</figcaption>
+<figcaption>O mistério do número 3: 7,3 mi de visualizações</figcaption>
 </figure>
 
 <figure>
